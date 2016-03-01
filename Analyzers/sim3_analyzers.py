@@ -1,0 +1,121 @@
+import numpy as np
+import os
+import json
+from json_loading import json_load_byteified as jlb
+from matplotlib import pyplot
+
+def avg_scores_sim3():
+    print 'Starting...'
+    score_log = {}
+    for systems in ('WC', 'WH','CW','CH','HW','HC'):
+        score_log[systems] = {}
+        for sys in systems:
+            total_scores = np.array([[0., 0., 0.] for i in range(101)])
+            for file_name in os.listdir('../LogFiles/Sim3b/' + systems):
+                with open('../LogFiles/Sim3b/' + systems + '/' + file_name, 'r') as f:
+                    data = jlb(f)
+                    scores = np.array(data['scores'][sys])
+                    total_scores += scores
+            avg_scores = total_scores/10
+            score_log[systems][sys] = (avg_scores).tolist()
+    
+    f = open('../LogFiles/Sim3b/Extracted/Scores.json', 'w')
+    json.dump(score_log, f)
+
+
+
+def std_devs_sim3():
+    print 'Starting...'
+    dev_log = {}
+    for systems in ('WC', 'WH','CW','CH','HW','HC'):
+        dev_log[systems] = {}
+        for sys in systems:
+            scores = np.empty((101,3,10))
+            i = 0
+            for file_name in os.listdir('../LogFiles/Sim3b/' + systems):
+                with open('../LogFiles/Sim3b/' + systems + '/' + file_name, 'r') as f:
+                    data = jlb(f)
+                    scores[:,:,i] = np.array(data['scores'][sys])
+                i += 1
+            std_devs = np.empty((101,3))
+            for x in range(101):
+                for y in range(3):
+                    std_devs[x,y] = np.std(scores[x,y,:])
+            dev_log[systems][sys] = (std_devs).tolist()
+    
+    f = open('../LogFiles/Sim3b/Extracted/Std_Devs.json', 'w')
+    json.dump(dev_log, f)
+
+
+
+def plot_scores_sim3(scores):
+    fig = pyplot.figure(figsize=(30,25))    
+    x = range(101)
+    i = 1
+    for systems in scores:
+        thresh = fig.add_subplot(6,2,i)
+        act = fig.add_subplot(6,2,i+1)
+        thresh.set_title('% Correct Pitches')
+        act.set_title('% Max Activation')  
+        if 'W' in systems:
+            W_scores = np.array(scores[systems]['W'])
+            linet1, = thresh.plot(x, W_scores[:,0], 'b', linewidth=2)
+            linea1, = act.plot(x, W_scores[:,1], 'b', linewidth=2)
+        if 'C' in systems:        
+            C_scores = np.array(scores[systems]['C'])
+            linet2, = thresh.plot(x, C_scores[:,0], 'r', linewidth=2)
+            linea2, = act.plot(x, C_scores[:,1], 'r', linewidth=2)
+        if 'H' in systems:
+            H_scores = np.array(scores[systems]['H'])
+            linet3, = thresh.plot(x, H_scores[:,0], 'g', linewidth=2)
+            linea3, = act.plot(x, H_scores[:,1], 'g', linewidth=2)
+
+        thresh.set_ylim((0,100))
+        act.set_ylim((0,100))
+        i +=2
+        
+    pyplot.show()
+    
+        
+def print_start_and_end_scores(scores, devs):
+    for systems in scores:
+        print 'RESULTS FOR SYSTEMS: ' + systems
+        if 'W' in systems:
+            W_scores = np.array(scores[systems]['W'])
+            W_devs = np.array(devs[systems]['W'])
+            print 'WESTERN SCORES:'
+            print 'INITIAL\t\tFINAL'
+            print W_scores[0,0], (W_devs[0,0]), '\t', W_scores[-1,0], (W_devs[-1,0])
+            print W_scores[0,1], (W_devs[0,1]), '\t', W_scores[-1,1], (W_devs[-1,1])
+            #print W_scores[0,2], (W_devs[0,2]), '\t', W_scores[-1,2], (W_devs[-1,2])
+        
+        if 'C' in systems:
+            C_scores = np.array(scores[systems]['C'])
+            C_devs = np.array(devs[systems]['C'])
+            print '\nCHINESE SCORES:'
+            print 'INITIAL\t\tFINAL'
+            print C_scores[0,0], (C_devs[0,0]), '\t', C_scores[-1,0], (C_devs[-1,0])
+            print C_scores[0,1], (C_devs[0,1]), '\t', C_scores[-1,1], (C_devs[-1,1])
+            #print C_scores[0,2], (C_devs[0,2]), '\t', C_scores[-1,2], (C_devs[-1,2])
+        
+        if 'H' in systems:
+            H_scores = np.array(scores[systems]['H'])
+            H_devs = np.array(devs[systems]['H'])
+            print '\nHINDUSTANI SCORES:'
+            print 'INITIAL\t\tFINAL'
+            print H_scores[0,0], (H_devs[0,0]), '\t', H_scores[-1,0], (H_devs[-1,0])
+            print H_scores[0,1], (H_devs[0,1]), '\t', H_scores[-1,1], (H_devs[-1,1])
+            #print H_scores[0,2], (H_devs[0,2]), '\t', H_scores[-1,2], (H_devs[-1,2])
+        print '__________________________________________________________'
+    
+
+'''
+avg_scores_sim3()
+std_devs_sim3()
+'''
+with open('../LogFiles/Sim3a/Extracted/Scores.json', 'r') as f:
+    scores = jlb(f)
+    with open('../LogFiles/Sim3a/Extracted/Std_Devs.json', 'r') as f2:
+        devs = jlb(f2)
+        print_start_and_end_scores(scores, devs)
+    plot_scores_sim3(scores)
