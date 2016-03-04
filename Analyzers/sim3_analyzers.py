@@ -16,7 +16,7 @@ def avg_scores_sim3():
                     data = jlb(f)
                     scores = np.array(data['scores'][sys])
                     total_scores += scores
-            avg_scores = total_scores/10
+            avg_scores = total_scores/10.
             score_log[systems][sys] = (avg_scores).tolist()
     
     f = open('../LogFiles/Sim3b/Extracted/Scores.json', 'w')
@@ -55,8 +55,8 @@ def plot_scores_sim3(scores):
     for systems in scores:
         thresh = fig.add_subplot(6,2,i)
         act = fig.add_subplot(6,2,i+1)
-        thresh.set_title('% Correct Pitches')
-        act.set_title('% Max Activation')  
+        thresh.set_title(systems)
+        act.set_title(systems)  
         if 'W' in systems:
             W_scores = np.array(scores[systems]['W'])
             linet1, = thresh.plot(x, W_scores[:,0], 'b', linewidth=2)
@@ -109,7 +109,29 @@ def print_start_and_end_scores(scores, devs):
         print '__________________________________________________________'
     
 
+
+def print_scores():
+    print 'Starting...'
+    for systems in ('WC', 'WH','CW','CH','HW','HC'):
+        for file_name in os.listdir('../LogFiles/Sim3a/' + systems):
+            with open('../LogFiles/Sim3a/' + systems + '/' + file_name, 'r') as f:
+                data = jlb(f)
+                for sys in systems:
+                    print systems, sys, file_name, data['scores'][sys][-1]
+
+def print_initial():
+    print 'Starting...'
+    for systems in ('WC', 'WH','CW','CH','HW','HC'):
+        for file_name in os.listdir('../LogFiles/Sim3a/' + systems):
+            with open('../LogFiles/Sim3a/' + systems + '/' + file_name, 'r') as f:
+                data = jlb(f)
+                for sys in systems:
+                    print systems, '\t', sys, '\t', data['scores'][sys][0][0], '\t', data['scores'][sys][0][1]
+
 '''
+print_initial()
+print_scores()
+
 avg_scores_sim3()
 std_devs_sim3()
 '''

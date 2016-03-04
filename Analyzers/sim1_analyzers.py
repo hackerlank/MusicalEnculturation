@@ -12,9 +12,10 @@ def avg_scores_sim1():
         for file_name in os.listdir('../LogFiles/Sim1/' + sys):
             with open('../LogFiles/Sim1/' + sys + '/' + file_name, 'r') as f:
                 data = jlb(f)
+                print sys, file_name, data['scores'][sys][-1]
                 scores = np.array(data['scores'][sys])
                 total_scores += scores
-        avg_scores = total_scores/10
+        avg_scores = total_scores/10.
         score_log[sys] = (avg_scores).tolist()
     
     f = open('../LogFiles/Sim1/Extracted/Scores.json', 'w')
@@ -106,7 +107,26 @@ def print_start_and_end_scores(scores, devs):
     #print H_scores[0,2], (H_devs[0,2]), '\t', H_scores[-1,2], (H_devs[-1,2])
     
 
+def print_scores():
+    print 'Starting...'
+    for sys in 'WCH':
+        for file_name in os.listdir('../LogFiles/Sim1/' + sys):
+            with open('../LogFiles/Sim1/' + sys + '/' + file_name, 'r') as f:
+                data = jlb(f)
+                print sys, file_name, data['scores'][sys][-1]
+                
+                
+def print_initial():
+    print 'Starting...'
+    for sys in 'WCH':
+        for file_name in os.listdir('../LogFiles/Sim1/' + sys):
+            with open('../LogFiles/Sim1/' + sys + '/' + file_name, 'r') as f:
+                data = jlb(f)
+                print data['scores'][sys][0][0], '\t', data['scores'][sys][0][1]
 '''
+print_initial()
+#print_scores()
+
 avg_scores_sim1()
 std_devs_sim1()
 '''
