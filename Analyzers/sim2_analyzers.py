@@ -49,29 +49,31 @@ def std_devs_sim2():
 
 
 def plot_scores_sim2(scores):
-    fig = pyplot.figure(figsize=(30,25))    
+    fig = pyplot.figure(figsize=(30,50))    
     x = range(101)
     i = 1
     for systems in scores:
         thresh = fig.add_subplot(4,2,i)
         act = fig.add_subplot(4,2,i+1)
-        thresh.set_title('% Correct Pitches')
-        act.set_title('% Max Activation')  
+        thresh.set_title('Pitch Accuracy: ' + str(systems))
+        act.set_title('Activation Accuracy: ' + str(systems))  
         if 'W' in systems:
             W_scores = np.array(scores[systems]['W'])
-            linet1, = thresh.plot(x, W_scores[:,0], 'b', linewidth=2)
-            linea1, = act.plot(x, W_scores[:,1], 'b', linewidth=2)
+            linet1, = thresh.plot(x, W_scores[:,0], 'b', linewidth=2, label='Western')
+            linea1, = act.plot(x, W_scores[:,1], 'b', linewidth=2, label='Western')
         if 'C' in systems:        
             C_scores = np.array(scores[systems]['C'])
-            linet2, = thresh.plot(x, C_scores[:,0], 'r', linewidth=2)
-            linea2, = act.plot(x, C_scores[:,1], 'r', linewidth=2)
+            linet2, = thresh.plot(x, C_scores[:,0], 'r', linewidth=2, label='Chinese')
+            linea2, = act.plot(x, C_scores[:,1], 'r', linewidth=2, label='Chinese')
         if 'H' in systems:
             H_scores = np.array(scores[systems]['H'])
-            linet3, = thresh.plot(x, H_scores[:,0], 'g', linewidth=2)
-            linea3, = act.plot(x, H_scores[:,1], 'g', linewidth=2)
+            linet3, = thresh.plot(x, H_scores[:,0], 'g', linewidth=2, label='Hindustani')
+            linea3, = act.plot(x, H_scores[:,1], 'g', linewidth=2, label='Hindustani')
 
         thresh.set_ylim((0,100))
+        thresh.legend(loc=4)
         act.set_ylim((0,100))
+        act.legend(loc=4)
         i +=2
         
     pyplot.show()
@@ -128,16 +130,16 @@ def print_initial():
                 for sys in systems:
                     print systems, '\t', sys, '\t', data['scores'][sys][0][0], '\t', data['scores'][sys][0][1]
 
+'''
 print_initial()
 #print_scores()
-'''
+
 avg_scores_sim2()
 std_devs_sim2()
-
+'''
 with open('../LogFiles/Sim2/Extracted/Scores.json', 'r') as f:
     scores = jlb(f)
     with open('../LogFiles/Sim2/Extracted/Std_Devs.json', 'r') as f2:
         devs = jlb(f2)
         print_start_and_end_scores(scores, devs)
     plot_scores_sim2(scores)
-'''

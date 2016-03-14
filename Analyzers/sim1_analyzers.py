@@ -55,27 +55,26 @@ def plot_scores_sim1(scores):
     act = fig.add_subplot(212)
     #dist = fig.add_subplot(313)
     
-    thresh.set_title('% Correct Pitches')
-    act.set_title('% Max Activation')
+    thresh.set_title('Pitch Score')
+    act.set_title('Activation Score')
     #dist.set_title('Avg Euclidean Distance')
     
     x = range(101)
     
-    linet1, = thresh.plot(x, W_scores[:,0], 'b', linewidth=2)
-    linet2, = thresh.plot(x, C_scores[:,0], 'r', linewidth=2)
-    linet3, = thresh.plot(x, H_scores[:,0], 'g', linewidth=2)
-    
-    linea1, = act.plot(x, W_scores[:,1], 'b', linewidth=2)
-    linea2, = act.plot(x, C_scores[:,1], 'r', linewidth=2)
-    linea3, = act.plot(x, H_scores[:,1], 'g', linewidth=2)
-    
+    linet1, = thresh.plot(x, W_scores[:,0], 'b', linewidth=2, label="Western")
+    linet2, = thresh.plot(x, C_scores[:,0], 'r', linewidth=2, label="Chinese")
+    linet3, = thresh.plot(x, H_scores[:,0], 'g', linewidth=2, label="Hindustani")
+    thresh.legend(loc=7)
+    linea1, = act.plot(x, W_scores[:,1], 'b', linewidth=2, label='Western')
+    linea2, = act.plot(x, C_scores[:,1], 'r', linewidth=2, label='Chinese')
+    linea3, = act.plot(x, H_scores[:,1], 'g', linewidth=2, label='Hindustani')
+    act.legend(loc=7)
     #lined1, = dist.plot(x, W_scores[:,2], 'b', linewidth=2)
     #lined2, = dist.plot(x, C_scores[:,2], 'r', linewidth=2)
     #lined3, = dist.plot(x, H_scores[:,2], 'g', linewidth=2)
     
     thresh.set_ylim((0,100))
     act.set_ylim((0,100))
-    
     pyplot.show()
         
         
