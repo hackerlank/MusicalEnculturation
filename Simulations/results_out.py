@@ -28,13 +28,17 @@ def map_keys(som, keynames, keys):
     print '\nCHECKING LEARNING AND MAPPING KEYS:'
     mapping = [['' for i in range(som.width)] for j in range(som.height)]
     accurate = [[None for i in range(som.FV_size)] for j in range(len(keys))]
+    locations = {}
     for i in range(len(keys)):
         keyname = keynames[i]
         key = keys[i]
         r,c = som.best_match(key)
+        locations[keyname] = (r, c)
         mapping[r][c] += keyname
         accurate[i] = (abs(scipy.array(key) - som.nodes[r][c]) <= .1)
         print keyname, ': ', som.nodes[r][c]
         print accurate[i]
     for row in mapping:
         print row
+    return locations
+    

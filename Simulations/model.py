@@ -123,7 +123,7 @@ class SOM:
         return scipy.unravel_index(scipy.argmax(scipy.multiply(self.nodes, inputs).sum(axis=2)), (self.height,self.width))
 
     def score(self):
-        for sys in self.systems:
+        for sys in 'WCH':
             if sys not in self.log['scores']:
                 self.log['scores'][sys] = []
             
@@ -132,19 +132,19 @@ class SOM:
             
             #WESTERN KEYS
             if sys == 'W':
-                print '\nWESTERN SCORES:'
+                #print '\nWESTERN SCORES:'
                 keynames = ['C','G','D','A','E','A-','E-','B-','F']
                 keys = [[1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0], [1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0], [1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0], [1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0], [1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0], [-1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0], [-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0], [1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0], [1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0]]
     
             #CHINESE KEYS
             if sys == 'C':
-                print '\nCHINESE SCORES:'
+                #print '\nCHINESE SCORES:'
                 keynames = ['A*','A#*','B*','C*','D*','D#*','E*','F*','G*']
                 keys = [[1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0], [-1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0], [-1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0], [1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0], [1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0], [-1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0], [1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0], [-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0], [1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0]]
             
             #HINDUSTANI KEYS
             if sys == 'H':
-                print '\nHINDUSTANI SCORES:'
+                #print '\nHINDUSTANI SCORES:'
                 keynames = ['Bilaval','Khamaj','Kafi','Asavari','Bhairavi','Kalyan','Todi','Purvi','Marva','Bhairav']
                 keys = [[1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0], [1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0], [1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0], [-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0], [-1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0], [1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0], [-1.0, -1.0, 1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0], [-1.0, -1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0], [1.0, -1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0], [-1.0, -1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]]
     
@@ -166,9 +166,9 @@ class SOM:
             act_score = round(act_score/total_pitches*100,3)
             distance = distance/len(keys)
             self.log['scores'][sys].append((thresh_score9, act_score, distance))
-            print 'Threshold Score (.9): ', thresh_score9
-            print 'Activation Score: ', act_score
-            print 'Avg Euclidean Distance: ', distance
+            #print 'Threshold Score (.9): ', thresh_score9
+            #print 'Activation Score: ', act_score
+            #print 'Avg Euclidean Distance: ', distance
 
     def update_log(self):
         self.log['states'].append(deepcopy(self.nodes).tolist())
@@ -176,5 +176,8 @@ class SOM:
     def save_log(self, log_file):
         with open(log_file, 'w') as f:
             json.dump(self.log, f)
+    
+    def set_nodes(self,nodes):
+        self.nodes = nodes
         
         

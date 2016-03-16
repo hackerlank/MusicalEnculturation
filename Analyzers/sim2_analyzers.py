@@ -3,6 +3,9 @@ import os
 import json
 from json_loading import json_load_byteified as jlb
 from matplotlib import pyplot
+import sys
+sys.path.insert(0, '../Simulations/')
+from model import SOM
 
 def avg_scores_sim2():
     print 'Starting...'
@@ -114,12 +117,15 @@ def print_start_and_end_scores(scores, devs):
 
 def print_scores():
     print 'Starting...'
+    print 'Group\tiPAccW\tiAAccW\tfPAccW\tfAAccW\tiPAccC\tiAAccC\tfPAccC\tfAAccC\tiPAccH\tiAAccH\tfPAccH\tfAAccH\t'
     for systems in ('WCH', 'WC','WH','CH'):
         for file_name in os.listdir('../LogFiles/Sim2/' + systems):
             with open('../LogFiles/Sim2/' + systems + '/' + file_name, 'r') as f:
                 data = jlb(f)
-                for sys in systems:
-                    print systems, sys, file_name, data['scores'][sys][-1]
+                string = systems + '\t'
+                for s in 'WCH':
+                    string = string + str(data['scores'][s][0][0]) + '\t' + str(data['scores'][s][0][1]) + '\t' + str(data['scores'][s][-1][0]) + '\t' + str(data['scores'][s][-1][1]) + '\t'
+                print string
 
 def print_initial():
     print 'Starting...'
@@ -127,15 +133,34 @@ def print_initial():
         for file_name in os.listdir('../LogFiles/Sim2/' + systems):
             with open('../LogFiles/Sim2/' + systems + '/' + file_name, 'r') as f:
                 data = jlb(f)
-                for sys in systems:
+                for sys in 'WCH':
                     print systems, '\t', sys, '\t', data['scores'][sys][0][0], '\t', data['scores'][sys][0][1]
 
-'''
-print_initial()
-#print_scores()
+def score_all():
+    for sys in ('WCH', 'WC','WH','CH'):
+        for file_name in os.listdir('../LogFiles/Sim2/' + sys):
+            with open('../LogFiles/Sim2/' + sys + '/' + file_name, 'r+') as f:
+                print file_name
+                data = jlb(f)
+                states = data['states']
+                som = SOM(30, 30, 12, .25, sys, 'M')
+                for state in states:
+                    state = np.array(state)
+                    som.set_nodes(state)
+                    som.score()
+                scores = som.log['scores']
+                data = {'states':states, 'scores':scores}
+                f.seek(0)
+                json.dump(data, f)
+                f.truncate()
 
-avg_scores_sim2()
-std_devs_sim2()
+#score_all()
+
+#print_initial()
+print_scores()
+
+#avg_scores_sim2()
+#std_devs_sim2()
 '''
 with open('../LogFiles/Sim2/Extracted/Scores.json', 'r') as f:
     scores = jlb(f)
@@ -143,3 +168,4 @@ with open('../LogFiles/Sim2/Extracted/Scores.json', 'r') as f:
         devs = jlb(f2)
         print_start_and_end_scores(scores, devs)
     plot_scores_sim2(scores)
+'''
